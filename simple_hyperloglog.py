@@ -49,6 +49,7 @@ class HyperLogLog(object):
         m = 2 ** p
         i.e. p = log((1.04 / error) ** 2)
         """
+        self.error = relative_error # デモ用に保存
         self.p = int(ceil(log((1.04 / relative_error) ** 2, 2)))
         self.m = 2 ** self.p
         self.alpha = get_alpha(self.p)
@@ -76,13 +77,13 @@ class HyperLogLog(object):
 
     def estimate_cardinality(self):
         E = self.get_raw_estimate()
-        if E <= (float(5/2) * self.m): # small range correction
+        if E <= ((5./2) * self.m): # small range correction
             v = self.M.count(0)
             if v != 0:
                 return linear_counting(self.m, v)
             else:
                 return E
-        elif E <= (float(1/30) * (2 ** 32)):
+        elif E <= ((1./30) * (2 ** 32)):
             return E
         else: # large range correction
             return -(2 ** 32) * log(1 - (float(E) / (2 ** 32)))
