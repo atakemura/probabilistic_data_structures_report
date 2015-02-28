@@ -1,4 +1,5 @@
 # coding: utf-8
+# simple_loglog_demo.py
 
 """
 i: 試行回数
